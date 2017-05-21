@@ -6,9 +6,6 @@
  * 3.enjoy autoFlow!
  */
 
-let http = require('http');
-let child_process = require('child_process');
-
 // 配置监听端口
 const PORT = 1258;
 
@@ -21,7 +18,15 @@ const TOKEN = "";
 // 配置执行pull之后的命令流
 const buildRun_flow = (data, fn) => {
 	//fn是回调函数
+	console.log("下面执行自定义配置流")
 };
+
+
+/*
+ * mainCode
+ * */
+let http = require('http');
+let child_process = require('child_process');
 
 http.createServer((req, res) => {
 	let data = ''; // 放置请求过来的数据
@@ -34,53 +39,31 @@ http.createServer((req, res) => {
 			});
 			req.on('end', () => {
 				data = JSON.parse(data);
-				//前端isFront 后端isBack
 				console.log('get token:' + data.token);
 				if (data.token == undefined) {
+					console.log("wrong token");
 					return res.end('wrong token');
 				}
-				switch (data.token) {
-					case 'isFront':
-						console.log('get update in front_build...');
-						commands = [
-							`cd ${FRONT_PATH}`,
-							`echo pull from the frontRepo...`,
-							`git pull origin master`
-						].join('&&');
-						child_process.exec(commands, (err,out,errCode) => {
-							if (err instanceof Error) {
-								res.writeHead(500);
-								res.end('Server Internal Error.');
-								throw err;
-							}
-							console.log(out);
-							console.log(errCode);
-							res.writeHead(200);
-							res.end('Pull done');
-						});
-						buildRun_flow();
-						break;
-					case 'isBack':
-						console.log('get update in back...');
-						commands = [
-							`cd ${BACK_PATH}`,
-							`echo pull from the backRepo`,
-							`git pull origin master`
-						].join('&&');
-						child_process.exec(commands, (err,out,errCode) => {
-							if (err instanceof Error) {
-								res.writeHead(500);
-								res.end('Server Internal Error.');
-								throw err;
-							}
-							console.log(out);
-							console.log(errCode);
-							res.writeHead(200);
-							res.end('Pull done');
-						});
-						break;
-					default:
-						return res.end('wrong token');
+				if (data.token === TOKEN) {
+					console.log(`get update in ${PATH}`);
+					commands = [
+						`cd ${PATH}`,
+						`echo pull from the originRepo...`,
+						`git pull origin master`
+					].join('&&');
+					child_process.exec(commands, (err, out, errCode) => {
+						if (err instanceof Error) {
+							res.writeHead(500);
+							res.end('Server Internal Error.');
+							throw err;
+						}
+						console.log(out);
+						console.log(errCode);
+						res.writeHead(200);
+						console.log("pull done");
+						res.end('Pull done');
+					});
+					buildRun_flow();
 				}
 			});
 			break;
