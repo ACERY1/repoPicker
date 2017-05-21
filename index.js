@@ -40,7 +40,6 @@ http.createServer((req, res) => {
 			});
 			req.on('end', () => {
 				data = JSON.parse(data);
-				console.log(data);
 				console.log('get token:' + data.token);
 				if (data.token == undefined) {
 					console.log("wrong token");
@@ -55,6 +54,8 @@ http.createServer((req, res) => {
 					].join('&&');
 					child_process.exec(commands, (err, out, errCode) => {
 						if (err instanceof Error) {
+							console.log(out);
+							console.log(errCode);
 							res.writeHead(500);
 							res.end('Server Internal Error.');
 							throw err;
