@@ -10,7 +10,7 @@
 const PORT = 1258;
 
 // 配置监听仓库路径(相对)
-const PATH = '/home/back/front_build';
+const PATH = '../buildFlow';
 
 // 配置校验token(目前只支持post)
 const TOKEN = "";
@@ -40,6 +40,7 @@ http.createServer((req, res) => {
 			});
 			req.on('end', () => {
 				data = JSON.parse(data);
+				console.log(data);
 				console.log('get token:' + data.token);
 				if (data.token == undefined) {
 					console.log("wrong token");
