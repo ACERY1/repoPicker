@@ -18,7 +18,7 @@ const TOKEN = "yzy";
 // 配置执行pull之后的命令流
 const buildRun_flow = (data, fn) => {
 	//fn是回调函数
-	console.log("下面执行自定义配置流")
+	console.log("exec the DIYAutoFlow")
 };
 
 
